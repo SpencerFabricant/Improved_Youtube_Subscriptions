@@ -11,11 +11,12 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 import googleapiclient.discovery
 from googleapiclient.errors import HttpError
-from datetime import datetime
+from datetime import datetime, timedelta
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 CLIENT_SECRETS_FILE = os.path.expanduser("~/.google_client/improved_subscriptions_secret.json")
 AUTH_TOKEN_FILE = os.path.expanduser("~/.google_client/token.json")
+
 
 def get_youtube():
     creds = None
@@ -77,18 +78,47 @@ def get_video_ids_from_channel_id(channel_id, after='1990-01-01T00:00:00Z', befo
 
     return video_ids
 
-def get_video_info(video_id):
+def create_new_playlist(playlist_name):
     youtube = get_youtube()
-    request = youtube.videos().list(
-        part="player, contentDetails,snippet",
-        id="TWFeHYvEMj4"
+
+    request = youtube.playlists().insert(
+        part="snippet, status",
+        body={
+          "snippet": {
+            "title": playlist_name,
+            "defaultLanguage":"EN",
+            "description":"test"
+          },
+          "status": {
+            "privacyStatus": "private"
+          }
+        }
     )
-    #TODO
     response = request.execute()
 
+    return response['id']
 
-def get_now():
-    return f'{datetime.utcnow().isoformat()}Z'
+def add_video_to_playlist(playlist_id, video_id):
+    youtube = get_youtube()
+
+    request = youtube.playlistItems().insert(
+        part="snippet",
+        body={
+          "snippet": {
+            "playlistId": playlist_id,
+            "position": 0,
+            "resourceId": {
+              "kind": "youtube#video",
+              "videoId": video_id
+            }
+          }
+        }
+    )
+    response = request.execute()
+    
+    print(response)
+
+
 
 def main():
     after = '2024-06-01T00:00:00Z'

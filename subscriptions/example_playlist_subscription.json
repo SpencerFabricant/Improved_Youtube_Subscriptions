@@ -2,10 +2,14 @@
   "channels": [
     {
       "channel_name": "jocat",
-      "channel_id": "UCRDVE5L1LTWhmPAKKbUBGtg"
-    }
+      "channel_id": "UCRDVE5L1LTWhmPAKKbUBGtg",
+      "last_fetch": "2025-02-11T22:45:11.410102Z"
+    },
     {
-	"channel_name":"BJGpixel"
+      "channel_name": "BJGpixel",
+      "channel_id": "UCC26K7LTSrJK0BPAUyyvtQg",
+      "last_fetch": "2025-02-11T22:45:13.148177Z"
     }
-  ]
+  ],
+  "playlist_id": "PLx0AefKO7rvn-abyU7bIk-exmIiHOywtD"
 }
