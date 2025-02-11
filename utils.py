@@ -6,25 +6,42 @@
 
 import os
 
-import google_auth_oauthlib.flow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 import googleapiclient.discovery
-import googleapiclient.errors
+from googleapiclient.errors import HttpError
 from datetime import datetime
 
-scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+SCOPES = ["https://www.googleapis.com/auth/youtube.force-ssl"]
+CLIENT_SECRETS_FILE = os.path.expanduser("~/.google_client/improved_subscriptions_secret.json")
+AUTH_TOKEN_FILE = os.path.expanduser("~/.google_client/token.json")
 
 def get_youtube():
-    api_key = os.environ['GOOGLE_API_KEY']
+    creds = None
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+    if os.path.exists(AUTH_TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(AUTH_TOKEN_FILE, SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+          creds.refresh(Request())
+        else:
+          flow = InstalledAppFlow.from_client_secrets_file(
+              CLIENT_SECRETS_FILE, SCOPES
+          )
+          creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open(AUTH_TOKEN_FILE, "w") as token:
+          token.write(creds.to_json())
+    
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = os.path.expanduser("~/.google_client/improved_subscriptions_secret.json")
 
-
-    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-        client_secrets_file, scopes)
-    credentials = flow.run_local_server()
     youtube = googleapiclient.discovery.build(
-        api_service_name, api_version, credentials=credentials)
+        api_service_name, api_version, credentials=creds)
 
     return youtube
 
