@@ -1,0 +1,6 @@
+
+* Create README file
+* Add OAuth to build playlists
+* add CLI functionality
+	* Create new playlist subscription
+	* Add to subscription
