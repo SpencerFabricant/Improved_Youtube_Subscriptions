@@ -91,7 +91,7 @@ class SubscriptionPlaylist:
 
 
         for video_id in new_videos:
-            print('adding {video_id}')
+            print(f'adding {video_id}')
             youtube_utils.add_video_to_playlist(playlist_id, video_id)
 
         self._save_data()
