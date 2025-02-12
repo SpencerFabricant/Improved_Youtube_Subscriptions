@@ -3,19 +3,17 @@ import os
 import sys
 import argparse
 
+from consts import get_settings
 import youtube_utils
 from datetime import datetime, timedelta
 
-
-# when adding a channel to a subscription, include videos made up to 14 days earlier
-SUBSCRIPTION_OFFSET_DAYS = 14
 
 
 def get_now():
     return f'{datetime.utcnow().isoformat()}Z'
 
 def get_init_subscription_time():
-    start_time = datetime.utcnow() - timedelta(days=SUBSCRIPTION_OFFSET_DAYS)
+    start_time = datetime.utcnow() - timedelta(days=get_settings().initial_subscription_backdate)
     return f'{start_time.isoformat()}Z'
 
 
@@ -107,3 +105,10 @@ class SubscriptionPlaylist:
                 "last_fetch": get_init_subscription_time()
                 } )
         self._save_data()
+
+    def print(self):
+        print(f'Name: {self.playlist_name}')
+        print(f'    Active: {"playlist_id" in self.data}')
+        print(f'    Channels:')
+        for channel in self.data['channels']:
+            print(f'        {channel["channel_name"]}')
