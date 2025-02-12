@@ -117,8 +117,6 @@ def add_video_to_playlist(playlist_id, video_id):
     )
     response = request.execute()
     
-    print(response)
-
 
 
 def main():

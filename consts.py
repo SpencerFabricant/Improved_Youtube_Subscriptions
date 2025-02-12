@@ -6,7 +6,6 @@ settings_update_interval = 5 * 60
 
 defaults = {
         "client_secrets_file": os.path.expanduser("~/.google_client/improved_subscriptions_secret.json"),
-        "auth_token_file": os.path.expanduser("~/.google_client/token.json"),
         "initial_subscription_backdate": 14,
         "subscriptions_dir": os.path.join(os.path.dirname(__file__), 'subscriptions') 
         }
@@ -44,6 +43,9 @@ class Settings:
             except:
                 val = settings_dict[k]
             setattr(self, k, val)
+
+        cred_dirname = os.path.dirname(settings_dict['client_secrets_file'])
+        setattr(self, 'auth_token_file', os.path.join(cred_dirname, 'token.json'))
 
 _settings = Settings()
 _last_settings_update = time.time()
