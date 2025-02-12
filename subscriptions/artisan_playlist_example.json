@@ -1,12 +1,16 @@
 {
   "channels": [
     {
-      "channel_name": "jocat",
-      "last_fetch": "2025-02-12T00:37:24.944993Z"
+      "channel_name": "Justinthetrees"
     },
     {
-      "channel_name": "BJGpixel",
-      "last_fetch": "2025-02-12T00:37:25.320546Z"
+      "channel_name": "BJGpixel"
+    },
+    {
+      "channel_name": "floriangadsby"
+    },
+    {
+      "channel_name": "primitivetechnology9550"
     }
   ]
 }
