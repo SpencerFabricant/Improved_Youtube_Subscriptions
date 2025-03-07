@@ -38,6 +38,7 @@ def get_youtube():
         # Save the credentials for the next run
         with open(auth_token_file, "w") as token:
           token.write(creds.to_json())
+          print(f'Credentials stored at {auth_token_file}')
     
     api_service_name = "youtube"
     api_version = "v3"

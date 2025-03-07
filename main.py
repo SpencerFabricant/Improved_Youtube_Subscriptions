@@ -5,6 +5,7 @@ import sys
 import argparse
 from subscription_playlist import SubscriptionPlaylist
 from consts import reset_settings_to_default, get_settings
+import youtube_utils
 
 def get_subscription_file(name):
     return os.path.join(get_settings().subscriptions_dir, f'{name}.json')
@@ -26,12 +27,19 @@ if __name__ == "__main__":
     parser.add_argument('--update_all', action='store_true', help=f'Update all of the subscription playlists in {get_settings().subscriptions_dir}/')
     parser.add_argument('--reset_settings_to_default', action='store_true')
 
+    parser.add_argument('--update_token', action='store_true')
+
     parser.add_argument('--list_subscriptions', action='store_true')
 
     args = parser.parse_args()
 
     # init the settings file no matter what
     get_settings()
+
+    if args.update_token:
+        os.remove(get_settings().auth_token_file)
+        youtube_utils.get_youtube()
+        exit()
 
     if args.reset_settings_to_default:
         reset_settings_to_default()
